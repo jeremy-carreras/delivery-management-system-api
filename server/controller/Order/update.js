@@ -5,7 +5,7 @@ const update = async (id, body) => {
   const order = await Order.findByPk(id);
   if (!order) throw new Error('No se encontró una orden con ese id.');
 
-  const allowed = ['user_id', 'customer_name', 'customer_phone', 'delivery_address', 'total', 'status'];
+  const allowed = ['user_id', 'customer_name', 'customer_phone', 'delivery_address', 'total', 'status', 'cancellation_reason'];
   const dataUpdate = {};
   allowed.forEach((field) => {
     if (body[field] !== undefined) dataUpdate[field] = body[field];
