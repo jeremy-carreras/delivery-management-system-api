@@ -8,7 +8,7 @@ const update = require('../controller/Order/update');
 const remove = require('../controller/Order/remove');
 
 router.get('/orders', (req, res) =>
-  getAll().then((d) => res.json(d)).catch((e) => res.status(400).json({ message: e.message }))
+  getAll(req.query.phone).then((d) => res.json(d)).catch((e) => res.status(400).json({ message: e.message }))
 );
 router.get('/orders/:id', (req, res) =>
   getById(req.params.id).then((d) => res.json(d)).catch((e) => res.status(400).json({ message: e.message }))

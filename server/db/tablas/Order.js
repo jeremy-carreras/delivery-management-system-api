@@ -33,8 +33,12 @@ const Order = sequelize.define(
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM('Pending', 'Active', 'Completed', 'Cancelled'),
+      type: DataTypes.ENUM('Pending', 'Accepted', 'Preparando', 'En reparto', 'Entregado', 'Cancelled'),
       defaultValue: 'Pending',
+    },
+    cancellation_reason: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
   },
   {
