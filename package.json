@@ -9,6 +9,7 @@
     "db:data-fake": "node ./server/db/data-fake",
     "dev": "nodemon --exec ts-node ./server/app.ts",
     "build": "tsc",
+    "postinstall": "npm run build",
     "start": "node ./dist/app.js"
   },
   "repository": {
