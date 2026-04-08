@@ -1,4 +1,5 @@
 import Order from '../../db/tablas/Order';
+import { sendWhatsApp } from '../../services/whatsapp';
 
 const update = async (id, body: any) => {
   if (!id) throw new Error('El id es requerido.');
@@ -12,6 +13,21 @@ const update = async (id, body: any) => {
   });
 
   await Order.update(dataUpdate, { where: { id } });
+
+  // Notify customer via WhatsApp when order goes out for delivery
+  if (dataUpdate.status === 'En reparto') {
+    const freshOrder = await Order.findByPk(id);
+    if (freshOrder) {
+      const phone = (freshOrder as any).customer_phone as string;
+      const name  = (freshOrder as any).customer_name  as string;
+      const msg =
+        `🚚 ¡Hola ${name}! Tu pedido está *en camino*.\n` +
+        `Tu repartidor ya salió y llegará pronto a tu dirección.\n\n` +
+        `¡Gracias por tu pedido en FlashDrop! 🌟`;
+      await sendWhatsApp(phone, msg);
+    }
+  }
+
   return { message: 'Orden actualizada correctamente.' };
 };
 
