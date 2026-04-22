@@ -7,6 +7,7 @@
     "test": "node ./server/config/test",
     "db:install": "node ./server/db/install",
     "db:data-fake": "node ./server/db/data-fake",
+    "db:seed-prod": "ts-node ./server/db/seed-prod.ts",
     "dev": "nodemon --exec ts-node ./server/app.ts",
     "build": "tsc",
     "postinstall": "npm run build",
