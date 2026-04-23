@@ -1,10 +1,27 @@
 import Order from '../../db/tablas/Order';
 import OrderItem from '../../db/tablas/OrderItem';
 
-const generateOrderId = () => {
-  const year = new Date().getFullYear();
-  const random = Math.floor(Math.random() * 90000) + 10000;
-  return `ORD-${year}-${random}`;
+import { Op } from 'sequelize';
+
+const generateOrderId = async (): Promise<string> => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  
+  const startOfDay = new Date(year, now.getMonth(), now.getDate());
+  const endOfDay = new Date(year, now.getMonth(), now.getDate(), 23, 59, 59, 999);
+
+  const todaysOrdersCount = await Order.count({
+    where: {
+      created_at: {
+        [Op.between]: [startOfDay, endOfDay]
+      }
+    }
+  });
+
+  const orderNumber = todaysOrdersCount + 1;
+  return `ORD-${orderNumber}-${year}-${month}-${day}`;
 };
 
 const create = async (body: any) => {
@@ -26,7 +43,7 @@ const create = async (body: any) => {
   if (!delivery_address) throw new Error('La dirección de entrega es requerida.');
   if (total === undefined) throw new Error('El total es requerido.');
 
-  const orderId = id || generateOrderId();
+  const orderId = id || await generateOrderId();
 
   const order = await Order.create({
     id: orderId,
