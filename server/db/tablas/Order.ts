@@ -9,13 +9,14 @@ export interface OrderAttributes {
   customer_phone: string;
   delivery_address: string;
   total: number;
+  notes?: string;
   status?: 'Pending' | 'Accepted' | 'Preparando' | 'En reparto' | 'Entregado' | 'Cancelled';
   cancellation_reason?: string;
   assigned_to?: string;
   created_at?: Date;
 }
 
-export interface OrderCreationAttributes extends Optional<OrderAttributes, 'user_id' | 'status' | 'cancellation_reason' | 'assigned_to' | 'created_at'> {}
+export interface OrderCreationAttributes extends Optional<OrderAttributes, 'user_id' | 'status' | 'notes' | 'cancellation_reason' | 'assigned_to' | 'created_at'> {}
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   declare id: string;
@@ -25,6 +26,7 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
   declare delivery_address: string;
   declare total: number;
   declare status: 'Pending' | 'Accepted' | 'Preparando' | 'En reparto' | 'Entregado' | 'Cancelled';
+  declare notes: string;
   declare cancellation_reason: string;
   declare assigned_to: string;
   declare readonly created_at: Date;
@@ -62,6 +64,10 @@ Order.init(
     status: {
       type: DataTypes.ENUM('Pending', 'Accepted', 'Preparando', 'En reparto', 'Entregado', 'Cancelled'),
       defaultValue: 'Pending',
+    },
+    notes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
     cancellation_reason: {
       type: DataTypes.TEXT,

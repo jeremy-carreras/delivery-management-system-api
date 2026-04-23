@@ -16,6 +16,7 @@ const create = async (body: any) => {
   const delivery_address = body.delivery_address || body.deliveryAddress;
   const total = body.total;
   const status = body.status;
+  const notes = body.notes || null;
   const items = body.items;
 
   console.log(`[Order Create] Creating order with:`, { id, customer_name, itemsCount: items?.length });
@@ -33,6 +34,7 @@ const create = async (body: any) => {
     customer_name,
     customer_phone,
     delivery_address,
+    notes,
     total,
     status: status || 'Pending',
   });
